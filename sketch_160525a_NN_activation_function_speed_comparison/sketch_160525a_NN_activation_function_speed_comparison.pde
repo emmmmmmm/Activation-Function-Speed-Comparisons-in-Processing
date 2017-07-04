@@ -1,4 +1,6 @@
-// comparing different activation functions:
+// comparing the computational performence of standard activation functions
+// and their gradients
+
 int numTests = 10000000;
 
 void setup(){
@@ -11,40 +13,41 @@ void setup(){
   translate(0,20);
   text("FORWARD: + BACKWARD",0,0);
   translate(0,20);
+  translate(0,20);
 
 
   int timer = millis();
   for(int i=0;i<numTests;i++){
     sigmoid(i);
-    Gsigmoid(i);
+    dSigmoid(i);
   }
   text("Sigmoid: "+(millis()-timer)+"ms",0,0);
   translate(0,20);
   timer=millis();
   for(int i=0;i<numTests;i++){
     softSign(i);
-    GsoftSign(i);
+    dSoftSign(i);
   }
   text("SoftSign: "+(millis()-timer)+"ms",0,0);
   translate(0,20);
   timer=millis();
   for(int i=0;i<numTests;i++){
     tanh(i);
-    Gtanh(i);
+    dTanh(i);
   }
   text("Tanh: "+(millis()-timer)+"ms",0,0);
   translate(0,20);
   timer=millis();
   for(int i=0;i<numTests;i++){
     rectifiedLinear(i);
-    GrectifiedLinear(i);
+    dRectifiedLinear(i);
   }
   text("RectifiedLinear: "+(millis()-timer)+"ms",0,0);
   translate(0,20);
   timer=millis();
   for(int i=0;i<numTests;i++){
     arcTan(i);
-    GarcTan(i);
+    dArcTan(i);
   }
   text("ArcTan: "+(millis()-timer)+"ms",0,0);
 
@@ -54,21 +57,21 @@ void setup(){
 //================================
 // 0 -> 1
 float sigmoid(float val) {  return 1.0 / (1.0 + exp(-1.0 * val));}
-float Gsigmoid(float val){  return val * (1.0 - val ) * 1.0;}
+float dSigmoid(float val){  return val * (1.0 - val ) * 1.0;}
 //================================
-// -1 -> 1 (scaleable)
+// -1 -> 1 (scale-able)
 float softSign(float val) {  return val / (1.0 + abs(val));}
-float GsoftSign(float val){  return 1.0/sq(1.0+abs(val)) * 1.0;}
+float dSoftSign(float val){  return 1.0/sq(1.0+abs(val)) * 1.0;}
 //================================
 // -1 -> 1
 float tanh(float x) {  return (exp(x) - exp(-x)) / (exp(x) + exp(-x));}
-float Gtanh(float x){  return (1.0 - sq(x)) * 1.0; }
+float dTanh(float x){  return (1.0 - sq(x)) * 1.0; }
 //================================
 // 0 -> inf
 float rectifiedLinear(float x) {  return max(x,0.0);}
-float GrectifiedLinear(float x){  return (x > 0.0 ? 1.0*x : 0.0);}
+float dRectifiedLinear(float x){  return (x > 0.0 ? x : 0.0);}
 //================================
 // -PI/2 -> PI/2
 float arcTan(float x) {  return atan(x);}
-float GarcTan(float x){  return(1.0/(sq(x)+1.0))*1.0;}
+float dArcTan(float x){  return(1.0/(sq(x)+1.0))*1.0;}
 //================================

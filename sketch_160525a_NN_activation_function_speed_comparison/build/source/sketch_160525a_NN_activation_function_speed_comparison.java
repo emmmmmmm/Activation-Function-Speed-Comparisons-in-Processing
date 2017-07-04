@@ -14,7 +14,9 @@ import java.io.IOException;
 
 public class sketch_160525a_NN_activation_function_speed_comparison extends PApplet {
 
-// comparing different activation functions:
+// comparing the computational performence of standard activation functions
+// and their gradients
+
 int numTests = 10000000;
 
 public void setup(){
@@ -27,40 +29,41 @@ public void setup(){
   translate(0,20);
   text("FORWARD: + BACKWARD",0,0);
   translate(0,20);
+  translate(0,20);
 
 
   int timer = millis();
   for(int i=0;i<numTests;i++){
     sigmoid(i);
-    Gsigmoid(i);
+    dSigmoid(i);
   }
   text("Sigmoid: "+(millis()-timer)+"ms",0,0);
   translate(0,20);
   timer=millis();
   for(int i=0;i<numTests;i++){
     softSign(i);
-    GsoftSign(i);
+    dSoftSign(i);
   }
   text("SoftSign: "+(millis()-timer)+"ms",0,0);
   translate(0,20);
   timer=millis();
   for(int i=0;i<numTests;i++){
     tanh(i);
-    Gtanh(i);
+    dTanh(i);
   }
   text("Tanh: "+(millis()-timer)+"ms",0,0);
   translate(0,20);
   timer=millis();
   for(int i=0;i<numTests;i++){
     rectifiedLinear(i);
-    GrectifiedLinear(i);
+    dRectifiedLinear(i);
   }
   text("RectifiedLinear: "+(millis()-timer)+"ms",0,0);
   translate(0,20);
   timer=millis();
   for(int i=0;i<numTests;i++){
     arcTan(i);
-    GarcTan(i);
+    dArcTan(i);
   }
   text("ArcTan: "+(millis()-timer)+"ms",0,0);
 
@@ -70,23 +73,23 @@ public void setup(){
 //================================
 // 0 -> 1
 public float sigmoid(float val) {  return 1.0f / (1.0f + exp(-1.0f * val));}
-public float Gsigmoid(float val){  return val * (1.0f - val ) * 1.0f;}
+public float dSigmoid(float val){  return val * (1.0f - val ) * 1.0f;}
 //================================
-// -1 -> 1 (scaleable)
+// -1 -> 1 (scale-able)
 public float softSign(float val) {  return val / (1.0f + abs(val));}
-public float GsoftSign(float val){  return 1.0f/sq(1.0f+abs(val)) * 1.0f;}
+public float dSoftSign(float val){  return 1.0f/sq(1.0f+abs(val)) * 1.0f;}
 //================================
 // -1 -> 1
 public float tanh(float x) {  return (exp(x) - exp(-x)) / (exp(x) + exp(-x));}
-public float Gtanh(float x){  return (1.0f - sq(x)) * 1.0f; }
+public float dTanh(float x){  return (1.0f - sq(x)) * 1.0f; }
 //================================
 // 0 -> inf
 public float rectifiedLinear(float x) {  return max(x,0.0f);}
-public float GrectifiedLinear(float x){  return (x > 0.0f ? 1.0f*x : 0.0f);}
+public float dRectifiedLinear(float x){  return (x > 0.0f ? x : 0.0f);}
 //================================
 // -PI/2 -> PI/2
 public float arcTan(float x) {  return atan(x);}
-public float GarcTan(float x){  return(1.0f/(sq(x)+1.0f))*1.0f;}
+public float dArcTan(float x){  return(1.0f/(sq(x)+1.0f))*1.0f;}
 //================================
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "sketch_160525a_NN_activation_function_speed_comparison" };
